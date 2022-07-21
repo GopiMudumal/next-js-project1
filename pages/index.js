@@ -23,13 +23,27 @@ const DUMMY_MEETUPS = [
 const HomePage = (props) => {
   return <MeetupList meetups={props.meetups} />;
 };
+
+// only code runs in serverside
+// export const getServerProps = async (context) =>{
+//     const res = context.res;
+//     const req = context.req;
+    //feach data from api
+//     return {
+//         props:{
+//             meetups:DUMMY_MEETUPS
+//         }
+//     }
+// }
+
 // this code execute only during build process and not on the server and sepecially not on the clients of visitors
-export const getStaticProps = async () => {
-  //feacth data from api
+export async function getStaticProps(){
+//   feacth data from api
   return {
     props: {
       meetups: DUMMY_MEETUPS,
     },
+    revalidate:10
   };
 };
 
