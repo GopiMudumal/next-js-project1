@@ -7,7 +7,7 @@ async function handler(req, res) {
   try {
     if (req.method === "POST") {
       const data = req.body;
-      const client = await MongoClient.connect(process.env.REACT_APP_DATABASE);
+      const client = await MongoClient.connect(`mongodb+srv://gopimudumal:${process.env.REACT_APP_PASSWORD}@cluster0.clcjtfi.mongodb.net/meetups?retryWrites=true&w=majority`);
       const db = client.db();
 
       const meetupCollections = db.collection("meetups");
