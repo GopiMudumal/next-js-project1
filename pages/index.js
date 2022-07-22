@@ -1,24 +1,25 @@
 // our-domain.com/
 import MeetupList from "../components/meetups/MeetupList";
+import { MongoClient } from "mongodb";
 
-const DUMMY_MEETUPS = [
-  {
-    id: "m1",
-    title: "first photo",
-    image:
-      "https://w0.peakpx.com/wallpaper/912/569/HD-wallpaper-allu-arjun-allu-arjun-thumbnail.jpg",
-    address: "hydrabad",
-    description: "Stylish star and style icon ",
-  },
-  {
-    id: "m2",
-    title: "second photo",
-    image:
-      "https://w0.peakpx.com/wallpaper/621/172/HD-wallpaper-allu-arjun-allu-arjun-thumbnail.jpg",
-    address: "hydrabad",
-    description: "Stylish star and style icon ",
-  },
-];
+// const DUMMY_MEETUPS = [
+//   {
+//     id: "m1",
+//     title: "first photo",
+//     image:
+//       "https://w0.peakpx.com/wallpaper/912/569/HD-wallpaper-allu-arjun-allu-arjun-thumbnail.jpg",
+//     address: "hydrabad",
+//     description: "Stylish star and style icon ",
+//   },
+//   {
+//     id: "m2",
+//     title: "second photo",
+//     image:
+//       "https://w0.peakpx.com/wallpaper/621/172/HD-wallpaper-allu-arjun-allu-arjun-thumbnail.jpg",
+//     address: "hydrabad",
+//     description: "Stylish star and style icon ",
+//   },
+// ];
 
 const HomePage = (props) => {
   return <MeetupList meetups={props.meetups} />;
@@ -28,7 +29,7 @@ const HomePage = (props) => {
 // export const getServerProps = async (context) =>{
 //     const res = context.res;
 //     const req = context.req;
-    //feach data from api
+//feach data from api
 //     return {
 //         props:{
 //             meetups:DUMMY_MEETUPS
@@ -37,14 +38,29 @@ const HomePage = (props) => {
 // }
 
 // this code execute only during build process and not on the server and sepecially not on the clients of visitors
-export async function getStaticProps(){
-//   feacth data from api
+export async function getStaticProps() {
+  //only runs a build time
+  //   feacth data from api
+  const client = await MongoClient.connect(
+    "mongodb+srv://gopimudumal:Gopi%40786@cluster0.clcjtfi.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+  const meetupCollections = db.collection("meetups");
+  const meetups = await meetupCollections.find().toArray();
+
+  client.close();
+
   return {
     props: {
-      meetups: DUMMY_MEETUPS,
+      meetups: meetups.map((meetup) => ({
+        title: meetup.data.title,
+        address: meetup.data.address,
+        image: meetup.data.image,
+        id: meetup._id.toString(),
+      })),
     },
-    revalidate:10
+    revalidate: 1,
   };
-};
+}
 
 export default HomePage;
