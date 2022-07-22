@@ -54,9 +54,7 @@ const HomePage = (props) => {
 export async function getStaticProps() {
   //only runs a build time
   //   feacth data from api
-  const client = await MongoClient.connect(
-    "mongodb+srv://gopimudumal:Gopi%40786@cluster0.clcjtfi.mongodb.net/meetups?retryWrites=true&w=majority"
-  );
+  const client = await MongoClient.connect(process.env.REACT_APP_DATABASE);
   const db = client.db();
   const meetupCollections = db.collection("meetups");
   const meetups = await meetupCollections.find().toArray();

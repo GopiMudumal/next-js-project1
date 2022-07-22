@@ -13,7 +13,6 @@ async function handler(req, res) {
       const meetupCollections = db.collection("meetups");
 
       const result = await meetupCollections.insertOne({ data });
-     
 
       client.close();
 
