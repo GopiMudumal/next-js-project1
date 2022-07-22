@@ -22,7 +22,7 @@ const MeetupDetails = (props) => {
 };
 
 export async function getStaticPaths() {
-  const client = await MongoClient.connect(process.env.REACT_APP_DATABASE);
+  const client = await MongoClient.connect(`mongodb+srv://gopimudumal:${process.env.REACT_APP_PASSWORD}@cluster0.clcjtfi.mongodb.net/meetups?retryWrites=true&w=majority`);
   const db = client.db();
   const meetupCollections = db.collection("meetups");
   const meetups = await meetupCollections.find({}, { _id: 1 }).toArray();
@@ -37,7 +37,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const meetupId = context.params.meetupId;
-  const client = await MongoClient.connect(process.env.REACT_APP_DATABASE);
+  const client = await MongoClient.connect(`mongodb+srv://gopimudumal:${process.env.REACT_APP_PASSWORD}@cluster0.clcjtfi.mongodb.net/meetups?retryWrites=true&w=majority`);
   const db = client.db();
   const meetupCollections = db.collection("meetups");
   const selectedMeetup = await meetupCollections.findOne({
